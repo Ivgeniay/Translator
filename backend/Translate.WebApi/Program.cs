@@ -1,4 +1,10 @@
 
+using Translate.Application.Services;
+using Translate.Domain.Interfaces.Repositories;
+using Translate.Domain.Interfaces.Services;
+using Translate.Infrastructure.AiService;
+using Translate.Persistence.Repositories;
+
 namespace Translate.WebApi;
 
 public class Program
@@ -7,15 +13,32 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         builder.Services.AddAuthorization();
-
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+
+        builder.Services.AddScoped<ITranslationOrchestrator, TranslationOrchestrator>();
+        builder.Services.AddScoped<ITranslationJobProcessor, TranslationJobProcessor>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<ISessionCleanupService, SessionCleanupService>();
+
+        builder.Services.AddScoped<INotificationService, NotificationService>();
+
+        builder.Services.AddSignalR(options =>
+        {
+            options.EnableDetailedErrors = true;
+            options.MaximumReceiveMessageSize = 10 * 1024 * 1024;
+        });
+
+        builder.Services.AddHttpClient(nameof(IAiTranslationService));
+
+        builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+        builder.Services.AddScoped<IJobRepository, JobRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IAiTranslationService, AiTranslationService>();
+
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
@@ -24,6 +47,7 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+        app.MapHub<TranslationHub>("/translationHub");
 
         var summaries = new[]
         {
@@ -32,7 +56,7 @@ public class Program
 
         app.MapGet("/weatherforecast", (HttpContext httpContext) =>
         {
-            var forecast =  Enumerable.Range(1, 5).Select(index =>
+            var forecast = Enumerable.Range(1, 5).Select(index =>
                 new WeatherForecast
                 {
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

@@ -22,6 +22,14 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "Build Backend",
+            "type": "shell",
+            "command": "dotnet run",
+            "options": {
+                "cwd": "${workspaceFolder}/backend/Translate.WebApi"
+            },
+        },
+        {
             "label": "Copy to Unity",
             "type": "shell",
             "command": "mkdir -p ../unity-client/Assets/Plugins && cp bin/Release/netstandard2.1/CommonLib.dll ../../unity-client/Assets/Plugins/",

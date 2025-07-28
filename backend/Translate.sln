@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translate.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translate.WebApi", "Translate.WebApi\Translate.WebApi.csproj", "{45126935-60B7-4660-9847-04B72F73D911}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translate.Persistence", "Translate.Persistence\Translate.Persistence.csproj", "{65C505B0-9BFC-4D36-8835-B38CF1E260C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{45126935-60B7-4660-9847-04B72F73D911}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45126935-60B7-4660-9847-04B72F73D911}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45126935-60B7-4660-9847-04B72F73D911}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C505B0-9BFC-4D36-8835-B38CF1E260C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C505B0-9BFC-4D36-8835-B38CF1E260C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C505B0-9BFC-4D36-8835-B38CF1E260C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C505B0-9BFC-4D36-8835-B38CF1E260C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
