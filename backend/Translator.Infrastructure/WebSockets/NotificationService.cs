@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Translator.CommonLib.Models;
 using Translator.Domain.Entities;
+using Translator.CommonLib.Events;
 
 namespace Translator.Application.Services
 {
@@ -25,7 +26,7 @@ namespace Translator.Application.Services
             try
             {
                 await _hubContext.Clients.Client(connectionId)
-                    .SendAsync("TranslationCompleted", response);
+                    .SendAsync(SignalREvents.TranslationCompleted, response);
 
                 _logger.LogInformation(
                     "Уведомление о завершении перевода отправлено клиенту {ConnectionId}",
@@ -51,7 +52,7 @@ namespace Translator.Application.Services
                 };
 
                 await _hubContext.Clients.Client(connectionId)
-                    .SendAsync("TranslationFailed", errorResponse);
+                    .SendAsync(SignalREvents.TranslationFailed, errorResponse);
 
                 _logger.LogInformation(
                     "Уведомление об ошибке перевода отправлено клиенту {ConnectionId}",
@@ -70,7 +71,7 @@ namespace Translator.Application.Services
             try
             {
                 await _hubContext.Clients.Client(connectionId)
-                    .SendAsync("SessionClosed");
+                    .SendAsync(SignalREvents.SessionClosed);
 
                 _logger.LogInformation(
                     "Уведомление о закрытии сессии отправлено клиенту {ConnectionId}",
@@ -96,7 +97,7 @@ namespace Translator.Application.Services
                 };
 
                 await _hubContext.Clients.All
-                    .SendAsync("SystemMessage", systemMessage);
+                    .SendAsync(SignalREvents.SystemMessage, systemMessage);
 
                 _logger.LogInformation("Системное сообщение отправлено всем клиентам: {Message}", message);
             }
@@ -118,7 +119,7 @@ namespace Translator.Application.Services
                 };
 
                 await _hubContext.Clients.Client(connectionId)
-                    .SendAsync("JobStatusChanged", statusUpdate);
+                    .SendAsync(SignalREvents.JobStatusChanged, statusUpdate);
 
                 _logger.LogInformation(
                     "Уведомление об изменении статуса задачи {JobId} отправлено клиенту {ConnectionId}",
@@ -132,4 +133,5 @@ namespace Translator.Application.Services
             }
         }
     }
+
 }

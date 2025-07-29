@@ -2,6 +2,8 @@ using Translator.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Translator.CommonLib.Models;
+using Translator.CommonLib.Events;
+using CommonLib.Models.Responses;
 
 namespace Translator.Application.Services
 {
@@ -24,7 +26,7 @@ namespace Translator.Application.Services
             {
                 var session = await _orchestrator.CreateSessionAsync(Context.ConnectionId, userId);
 
-                await Clients.Caller.SendAsync("SessionCreated", new
+                await Clients.Caller.SendAsync(SignalREvents.SessionCreated, new SessionCreatedResponse
                 {
                     SessionId = session.Id,
                     ConnectionId = Context.ConnectionId
@@ -37,7 +39,7 @@ namespace Translator.Application.Services
             {
                 _logger.LogError(ex, "Ошибка при создании сессии для клиента {ConnectionId}", Context.ConnectionId);
 
-                await Clients.Caller.SendAsync("Error", new
+                await Clients.Caller.SendAsync(SignalREvents.Error, new ErrorResponse
                 {
                     Message = "Ошибка при создании сессии",
                     Details = ex.Message
@@ -52,7 +54,7 @@ namespace Translator.Application.Services
                 var session = await _orchestrator.GetSessionByConnectionIdAsync(Context.ConnectionId);
                 if (session == null)
                 {
-                    await Clients.Caller.SendAsync("Error", new
+                    await Clients.Caller.SendAsync(SignalREvents.Error, new ErrorResponse
                     {
                         Message = "Сессия не найдена. Выполните JoinSession сначала."
                     });
@@ -61,7 +63,7 @@ namespace Translator.Application.Services
 
                 var job = await _orchestrator.ProcessTranslationAsync(session.Id, request);
 
-                await Clients.Caller.SendAsync("TranslationStarted", new
+                await Clients.Caller.SendAsync(SignalREvents.TranslationStarted, new TranslationStartedResponse
                 {
                     JobId = job.Id,
                     Status = job.Status.ToString()
@@ -74,7 +76,7 @@ namespace Translator.Application.Services
             {
                 _logger.LogError(ex, "Ошибка при запуске перевода для клиента {ConnectionId}", Context.ConnectionId);
 
-                await Clients.Caller.SendAsync("TranslationFailed", new
+                await Clients.Caller.SendAsync(SignalREvents.TranslationFailed, new TranslationFailedResponse
                 {
                     Error = ex.Message,
                     Timestamp = DateTime.UtcNow
@@ -88,7 +90,7 @@ namespace Translator.Application.Services
             {
                 var result = await _orchestrator.GetJobResultAsync(jobId);
 
-                await Clients.Caller.SendAsync("JobStatus", new
+                await Clients.Caller.SendAsync(SignalREvents.JobStatus, new JobStatusResponse
                 {
                     JobId = jobId,
                     Status = "Completed",
@@ -97,7 +99,7 @@ namespace Translator.Application.Services
             }
             catch (Exception ex)
             {
-                await Clients.Caller.SendAsync("JobStatus", new
+                await Clients.Caller.SendAsync(SignalREvents.JobStatus, new JobStatusResponse
                 {
                     JobId = jobId,
                     Status = "Failed",
