@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>3dd9b33b-0400-41ef-a3f1-5097814cf84c</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.5" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.4.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Translator.Application\Translator.Application.csproj" />
+    <ProjectReference Include="..\Translator.Infrastructure\Translator.Infrastructure.csproj" />
+    <ProjectReference Include="..\Translator.Persistence\Translator.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using System;
 
-namespace CommonLib.Models
+namespace Translator.CommonLib.Models
 {
     public class AudioSettings
     {

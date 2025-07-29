@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace CommonLib.Models
+namespace Translator.CommonLib.Models
 {
     public class LanguageSettings
     {

@@ -1,4 +1,4 @@
-namespace CommonLib.Models
+namespace Translator.CommonLib.Models
 {
     public enum Language
     {
